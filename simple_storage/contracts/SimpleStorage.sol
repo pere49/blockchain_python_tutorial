@@ -11,6 +11,13 @@ contract SimpleStorage {
     // address favoriteAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
     // bytes32 favoriteBytes = "cat";
 
+    struct People {
+        uint256 favoriteNumber;
+        string name;
+    }
+
+    People public person =  People({favoriteNumber: 2, name: "Patrick"});
+
     function store(uint256 _favoriteNumer) public {
         favoriteNumber = _favoriteNumer;
     }
