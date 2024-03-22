@@ -18,6 +18,9 @@ contract SimpleStorage {
 
     People public person =  People({favoriteNumber: 2, name: "Patrick"});
 
+    // dynamic array
+    People[] public people;
+
     function store(uint256 _favoriteNumer) public {
         favoriteNumber = _favoriteNumer;
     }
@@ -25,4 +28,10 @@ contract SimpleStorage {
     function retrieve() public view returns(uint256) {
         return favoriteNumber;
     }
+
+    // storing a data in memory will only be stored during execution, storage will keep data after storage
+    function addPerson(string memory _name, uint256 _favoriteNumber) public{
+        people.push(People({_favoriteNumber, _name}));
+    }
+
 }
