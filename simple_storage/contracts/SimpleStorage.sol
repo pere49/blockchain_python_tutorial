@@ -31,7 +31,7 @@ contract SimpleStorage {
 
     // storing a data in memory will only be stored during execution, storage will keep data after storage
     function addPerson(string memory _name, uint256 _favoriteNumber) public{
-        people.push(People({_favoriteNumber, _name}));
+        people.push(People(_favoriteNumber, _name));
     }
 
 }
