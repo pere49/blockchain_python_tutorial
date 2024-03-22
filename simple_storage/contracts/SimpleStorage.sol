@@ -20,6 +20,7 @@ contract SimpleStorage {
 
     // dynamic array
     People[] public people;
+    mapping(string => uint256) public nameToFavoriteNumber;
 
     function store(uint256 _favoriteNumer) public {
         favoriteNumber = _favoriteNumer;
@@ -29,9 +30,10 @@ contract SimpleStorage {
         return favoriteNumber;
     }
 
-    // storing a data in memory will only be stored during execution, storage will keep data after storage
+    // storing a data in memory will only be stored during execution, storage will keep data after execution
     function addPerson(string memory _name, uint256 _favoriteNumber) public{
         people.push(People(_favoriteNumber, _name));
+        nameToFavoriteNumber[_name] = _favoriteNumber;
     }
 
 }
