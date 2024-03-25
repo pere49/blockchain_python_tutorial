@@ -7,10 +7,22 @@ import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.so
 contract FundMe {
 
     mapping(address => uint256) public addressToAmountFunded;
+    address public owner;
+    address[] public funders;
+
+    constructor() {
+        owner = msg.sender;
+    }
     
     function fund() public payable {
+        // set threshold
+        uint256 minimumUSD = 50 * 10**8;
+        require(
+            getConversionRate(msg.value) >= minimumUSD, 
+            "You need to speed more ETH"
+        );
         addressToAmountFunded[msg.sender] += msg.value;
-        // determine the conversion rate 
+        funders.push(msg.sender);
     }
 
     function getVersion() public view returns (uint256) {
@@ -25,9 +37,24 @@ contract FundMe {
         return uint256(answer);
     }
 
+    // determine the conversion rate 
     function getConversionRate(uint256 ethAmount) public view returns (uint256) {
         uint256 ethPrice = getPrice();
         uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1000000000;
         return ethAmountInUsd;
+    }
+    // modifier is used to change the beaviour of a function in a declarative way
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
+
+    function withdraw() payable onlyOwner public {
+        payable(msg.sender).transfer(address(this).balance);
+        for (uint256 funderIndex=0; funderIndex < funders.length; funderIndex++){
+            address funder = funders[funderIndex];
+            addressToAmountFunded[funder] = 0;
+        }
+        funders = new address[](0);
     }
 }
